@@ -2,21 +2,18 @@ let pi = 0
 let radianes = 0
 let seno = 0
 let coseno = 0
-let x = 0
-let y = 0
 input.onPinPressed(TouchPin.P0, function () {
 	
 })
 input.onButtonPressed(Button.A, function () {
-    for (let index = 0; index < 50; index++) {
-        led.plotBarGraph(
-        input.acceleration(Dimension.Y),
-        250
-        )
+    basic.showString("A")
+    while (true) {
+        serial.writeValue("luz", input.lightLevel())
         basic.pause(500)
     }
 })
 input.onPinPressed(TouchPin.P2, function () {
+    basic.showString("P2")
     pi = 3.14159265359
     radianes = 0
     while (radianes <= 2 * pi) {
@@ -32,27 +29,22 @@ input.onPinPressed(TouchPin.P2, function () {
     }
 })
 input.onButtonPressed(Button.AB, function () {
-    while (true) {
-        led.plotBarGraph(
-        input.lightLevel(),
-        255
-        )
-    }
+	
 })
 input.onButtonPressed(Button.B, function () {
-    serial.writeValue("luz", Math.map(input.lightLevel(), 0, 255, 0, 10))
-    basic.pause(500)
-})
-input.onPinPressed(TouchPin.P1, function () {
-    x = 0
+    basic.showString("B")
     while (true) {
-        x = x + 1
-        y = Math.sqrt(x)
-        serial.writeValue("g.x", x)
-        serial.writeValue("g.y", y)
+        led.plotBarGraph(
+        Math.map(input.lightLevel(), 0, 255, 0, 10),
+        10
+        )
         basic.pause(500)
     }
 })
-basic.forever(function () {
-	
+input.onPinPressed(TouchPin.P1, function () {
+    for (let index = 0; index < 1000; index++) {
+        serial.writeValue("m.tiempo", input.runningTime() / 1000)
+        serial.writeValue("m.aceleracion", input.acceleration(Dimension.Y))
+        basic.pause(500)
+    }
 })
